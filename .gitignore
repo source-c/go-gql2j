@@ -1,0 +1,16 @@
+.idea/
+.vscode/
+.cursor/
+bin/
+dist/
+target/
+.coverage.out
+.env
+.envrc
+*~
+.*~
+*.bak
+*.tmp
+.DS_STORE
+.history
+*.sum
