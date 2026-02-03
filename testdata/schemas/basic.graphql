@@ -1,0 +1,19 @@
+type User {
+  id: ID!
+  name: String!
+  email: String
+  age: Int
+  active: Boolean!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  author: User!
+  tags: [String!]!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String
+}

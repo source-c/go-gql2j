@@ -3,6 +3,7 @@ package generator
 import (
 	"strings"
 
+	"github.com/source-c/go-gql2j/internal/errors"
 	"github.com/source-c/go-gql2j/internal/parser"
 )
 
@@ -76,7 +77,10 @@ func (g *InterfaceGenerator) Generate(ctx *Context, typeDef *parser.TypeDef) (st
 	for _, field := range typeDef.Fields {
 		methodCode, err := g.fieldGen.GenerateInterfaceMethod(tc, field)
 		if err != nil {
-			return "", err
+			return "", errors.NewGenerateError(
+				"failed to generate interface method",
+				err,
+			).WithTypeName(typeDef.Name).WithFieldName(field.Name)
 		}
 		if methodCode != "" {
 			sb.WriteString(methodCode)

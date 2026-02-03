@@ -1,0 +1,20 @@
+interface Node {
+  id: ID!
+}
+
+interface Timestamped {
+  createdAt: String!
+  updatedAt: String
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+}
+
+type Article implements Node & Timestamped {
+  id: ID!
+  title: String!
+  createdAt: String!
+  updatedAt: String
+}

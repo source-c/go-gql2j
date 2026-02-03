@@ -1,0 +1,21 @@
+schema:
+  path: "schema.graphql"
+
+output:
+  directory: "./generated"
+  package: "com.example.generated"
+
+java:
+  version: 17
+  fieldVisibility: "private"
+  collectionType: "List"
+  nullableHandling: "wrapper"
+  naming:
+    fieldCase: "camelCase"
+
+features:
+  lombok:
+    enabled: false
+  validation:
+    enabled: false
+    package: "jakarta"

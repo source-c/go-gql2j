@@ -3,6 +3,7 @@ package generator
 import (
 	"strings"
 
+	"github.com/source-c/go-gql2j/internal/errors"
 	"github.com/source-c/go-gql2j/internal/parser"
 )
 
@@ -137,7 +138,10 @@ func (g *FieldGenerator) GenerateSetter(fc *FieldContext) string {
 func (g *FieldGenerator) GenerateInterfaceMethod(tc *TypeContext, field *parser.FieldDef) (string, error) {
 	fc, err := NewFieldContext(tc, field)
 	if err != nil {
-		return "", err
+		return "", errors.NewGenerateError(
+			"failed to create field context",
+			err,
+		).WithTypeName(tc.TypeDef.Name).WithFieldName(field.Name)
 	}
 
 	if fc.ShouldSkip() {

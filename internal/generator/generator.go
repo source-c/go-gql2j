@@ -15,10 +15,11 @@ type GeneratedFile struct {
 
 // Generator orchestrates Java code generation.
 type Generator struct {
-	config        *config.Config
-	classGen      *ClassGenerator
-	interfaceGen  *InterfaceGenerator
-	enumGen       *EnumGenerator
+	config       *config.Config
+	classGen     *ClassGenerator
+	interfaceGen *InterfaceGenerator
+	enumGen      *EnumGenerator
+	unionGen     *UnionGenerator
 }
 
 // NewGenerator creates a new generator.
@@ -28,6 +29,7 @@ func NewGenerator(cfg *config.Config) *Generator {
 		classGen:     NewClassGenerator(),
 		interfaceGen: NewInterfaceGenerator(),
 		enumGen:      NewEnumGenerator(),
+		unionGen:     NewUnionGenerator(),
 	}
 }
 
@@ -82,9 +84,8 @@ func (g *Generator) generateType(ctx *Context, typeDef *parser.TypeDef) (*Genera
 		content, err = g.enumGen.Generate(ctx, typeDef)
 
 	case parser.TypeKindUnion:
-		// Unions could be generated as marker interfaces
-		// For now, skip them
-		return nil, nil
+		// Generate unions as marker interfaces
+		content, err = g.unionGen.Generate(ctx, typeDef)
 
 	case parser.TypeKindScalar:
 		// Scalars are mapped to existing Java types
@@ -161,7 +162,8 @@ func GetStats(files []*GeneratedFile, errors []error) Stats {
 		switch file.TypeDef.Kind {
 		case parser.TypeKindObject, parser.TypeKindInputObject:
 			stats.Classes++
-		case parser.TypeKindInterface:
+		case parser.TypeKindInterface, parser.TypeKindUnion:
+			// Unions are generated as marker interfaces
 			stats.Interfaces++
 		case parser.TypeKindEnum:
 			stats.Enums++

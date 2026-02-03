@@ -63,7 +63,10 @@ func (tm *TypeMapper) mapTypeInternal(typeRef *parser.TypeRef, topLevel bool) (*
 	if typeRef.IsList() {
 		elemResult, err := tm.mapTypeInternal(typeRef.Elem, false)
 		if err != nil {
-			return nil, err
+			return nil, errors.NewTypeMappingError(
+				"failed to map list element type",
+				err,
+			).WithSourceType(typeRef.Elem.Name)
 		}
 
 		// Box primitive element types
@@ -92,7 +95,10 @@ func (tm *TypeMapper) mapTypeInternal(typeRef *parser.TypeRef, topLevel bool) (*
 	namedType := typeRef.Name
 	result, err := tm.mapNamedType(namedType)
 	if err != nil {
-		return nil, err
+		return nil, errors.NewTypeMappingError(
+			"failed to map named type",
+			err,
+		).WithSourceType(namedType)
 	}
 
 	// Handle nullability

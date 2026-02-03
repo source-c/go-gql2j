@@ -1,0 +1,10 @@
+schema:
+  path: "schema.graphql"
+
+output:
+  directory: "./generated"
+  package: "com.example.generated"
+
+java:
+  version: 5
+  fieldVisibility: "private"

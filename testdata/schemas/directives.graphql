@@ -1,0 +1,9 @@
+type User @javaName(name: "UserEntity") {
+  id: ID! @javaName(name: "userId")
+  email: String! @constraint(email: true, maxLength: 255)
+  tags: [String!]! @collection(type: "Set")
+}
+
+type SkippedType @skip {
+  field: String
+}

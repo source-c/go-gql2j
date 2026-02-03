@@ -3,6 +3,7 @@ package api
 
 import (
 	"github.com/source-c/go-gql2j/internal/config"
+	"github.com/source-c/go-gql2j/internal/errors"
 	"github.com/source-c/go-gql2j/internal/generator"
 	"github.com/source-c/go-gql2j/internal/output"
 	"github.com/source-c/go-gql2j/internal/parser"
@@ -94,7 +95,7 @@ func Generate(opts Options) (*Result, error) {
 	} else if cfg.Schema.Path != "" {
 		schema, err = p.ParseWithIncludes(cfg.Schema.Path, cfg.Schema.Includes)
 	} else {
-		return nil, &ConfigError{Message: "no schema provided"}
+		return nil, errors.NewConfigError("no schema provided", nil)
 	}
 
 	if err != nil {
@@ -205,15 +206,6 @@ func loadConfig(opts Options) (*config.Config, error) {
 	}
 
 	return cfg, nil
-}
-
-// ConfigError represents a configuration error.
-type ConfigError struct {
-	Message string
-}
-
-func (e *ConfigError) Error() string {
-	return e.Message
 }
 
 // ParseSchema parses a GraphQL schema from a string.

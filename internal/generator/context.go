@@ -106,7 +106,20 @@ func NewFieldContext(tc *TypeContext, field *parser.FieldDef) (*FieldContext, er
 
 // ShouldSkip returns true if the field should be skipped.
 func (fc *FieldContext) ShouldSkip() bool {
-	return parser.ExtractSkipDirective(fc.Field.Directives) != nil
+	// Skip if @skip directive is present
+	if parser.ExtractSkipDirective(fc.Field.Directives) != nil {
+		return true
+	}
+
+	// Skip fields that reference introspection types (starting with __)
+	if fc.Field.Type != nil {
+		namedType := fc.Field.Type.NamedType()
+		if len(namedType) >= 2 && namedType[:2] == "__" {
+			return true
+		}
+	}
+
+	return false
 }
 
 // IsBooleanType returns true if the field is a boolean type.
