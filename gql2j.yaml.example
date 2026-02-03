@@ -1,0 +1,150 @@
+# gql2j Configuration Example
+# Copy this file to gql2j.yaml and customize for your project
+
+schema:
+  # Path to the main GraphQL schema file
+  path: "./schema.graphql"
+
+  # Additional schema files to include (glob patterns supported)
+  includes:
+    # - "./types/*.graphql"
+    # - "./queries/*.graphql"
+
+output:
+  # Directory for generated Java files
+  directory: "./generated"
+
+  # Java package name
+  package: "com.example.model"
+
+java:
+  # Target Java version (8, 11, 17, 21)
+  version: 17
+
+  # Field visibility: private, protected, package, public
+  fieldVisibility: "private"
+
+  # Collection type for GraphQL lists: List, Set, Collection
+  collectionType: "List"
+
+  # How to handle nullable fields: wrapper, optional, annotation
+  # - wrapper: Use wrapper types (Integer, Boolean, etc.)
+  # - optional: Use Optional<T>
+  # - annotation: Use @Nullable annotation
+  nullableHandling: "wrapper"
+
+  naming:
+    # Field naming convention: camelCase, snake_case
+    fieldCase: "camelCase"
+
+    # Suffix to add to generated class names (e.g., "Dto" -> "UserDto")
+    classSuffix: ""
+
+    # Prefix for generated interface names (e.g., "I" -> "IUser")
+    interfacePrefix: ""
+
+# Custom scalar type mappings
+typeMappings:
+  scalars:
+    # Map custom GraphQL scalars to Java types
+    DateTime:
+      javaType: "java.time.LocalDateTime"
+      imports:
+        - "java.time.LocalDateTime"
+
+    Date:
+      javaType: "java.time.LocalDate"
+      imports:
+        - "java.time.LocalDate"
+
+    UUID:
+      javaType: "java.util.UUID"
+      imports:
+        - "java.util.UUID"
+
+    JSON:
+      javaType: "com.fasterxml.jackson.databind.JsonNode"
+      imports:
+        - "com.fasterxml.jackson.databind.JsonNode"
+
+    BigDecimal:
+      javaType: "java.math.BigDecimal"
+      imports:
+        - "java.math.BigDecimal"
+
+# Feature toggles
+features:
+  lombok:
+    # Enable Lombok annotations
+    enabled: false
+
+    # @Data annotation (includes @Getter, @Setter, @ToString, etc.)
+    data: true
+
+    # @Builder annotation
+    builder: false
+
+    # @NoArgsConstructor annotation
+    noArgsConstructor: true
+
+    # @AllArgsConstructor annotation
+    allArgsConstructor: false
+
+    # @Getter annotation (if data is false)
+    getter: false
+
+    # @Setter annotation (if data is false)
+    setter: false
+
+  validation:
+    # Enable JSR-303/JSR-380 validation annotations
+    enabled: false
+
+    # Validation package: jakarta (Java 11+) or javax (Java 8)
+    package: "jakarta"
+
+    # Add @NotNull to non-null GraphQL fields
+    notNullOnNonNull: true
+
+  jackson:
+    # Enable Jackson annotations (future feature)
+    enabled: false
+
+# Java version specific overrides
+javaVersionOverrides:
+  8:
+    features:
+      validation:
+        # Use javax.validation for Java 8
+        package: "javax"
+
+# Supported GraphQL Directives:
+#
+# @skip - Exclude type or field from generation
+#   type Internal @skip { ... }
+#   field: String @skip
+#
+# @javaName(name: "...") - Override Java name
+#   type User @javaName(name: "UserEntity") { ... }
+#   userId: ID! @javaName(name: "id")
+#
+# @javaType(type: "...", imports: [...]) - Custom Java type for field
+#   id: ID! @javaType(type: "java.util.UUID", imports: ["java.util.UUID"])
+#
+# @deprecated(reason: "...") - Add @Deprecated annotation
+#   oldField: String @deprecated(reason: "Use newField instead")
+#
+# @annotation(value: "...", imports: [...]) - Add custom annotation
+#   type User @annotation(value: "@Entity", imports: ["javax.persistence.Entity"]) { ... }
+#
+# @constraint(...) - JSR-303 validation constraints
+#   email: String! @constraint(pattern: "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
+#   age: Int @constraint(min: 0, max: 150)
+#   name: String @constraint(minLength: 1, maxLength: 100)
+#   password: String @constraint(notBlank: true)
+#
+# @lombok(exclude: [...], include: [...]) - Per-type Lombok config
+#   type User @lombok(exclude: ["builder"]) { ... }
+#
+# @collection(type: "Set") - Override collection type for field
+#   tags: [String] @collection(type: "Set")
