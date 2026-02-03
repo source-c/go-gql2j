@@ -4,7 +4,7 @@
 BINARY_NAME := gql2j
 MAIN_PATH := ./cmd/gql2j
 BUILD_DIR := ./build
-VERSION := 1.0.0
+VERSION := 1.0.1
 GO := go
 GOFLAGS := -v
 LDFLAGS := -ldflags "-s -w -X main.version=$(VERSION)"

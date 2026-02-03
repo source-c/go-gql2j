@@ -42,7 +42,7 @@ func main() {
 
 	// Handle version flag
 	if *version {
-		fmt.Println("gql2j version 1.0.0")
+		fmt.Println("gql2j version 1.0.1")
 		os.Exit(0)
 	}
 
